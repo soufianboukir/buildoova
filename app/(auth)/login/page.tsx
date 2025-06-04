@@ -1,18 +1,19 @@
 import buildoovaLogo from '@/assets/images/buildoova-logo.png'
 import { LoginForm } from "@/components/login-form"
 import Image from "next/image"
+import Link from 'next/link'
 
 export default function LoginPage() {
   return (
     <div className="grid min-h-svh lg:grid-cols-2">
         <div className="flex flex-col gap-4 p-6 md:p-10">
             <div className="flex justify-center gap-2 md:justify-start">
-                <a href="#" className="flex items-end gap-1 font-semibold">
+                <Link href="/" className="flex items-end gap-1 font-semibold">
                     <div className="bg-white text-primary-foreground flex size-10 items-center justify-center rounded-md">
                         <Image src={buildoovaLogo} width={30} height={30} alt="Buildoova logo"/>
                     </div>
                     buildoova
-                </a>
+                </Link>
             </div>
             <div className="flex flex-1 items-center justify-center">
                 <div className="w-full max-w-md">
@@ -35,7 +36,7 @@ export default function LoginPage() {
                         />
                         <h1 className="text-4xl font-bold">Design Smarter, Launch Faster</h1>
                         <p className="mt-4 text-lg max-w-xl mx-auto">
-                            Buildoova empowers creators, freelancers, and startups to generate stunning portfolios & landing pages in minutes using AI or ready-made themes.
+                            buildoova empowers creators, freelancers, and startups to generate stunning portfolios & landing pages in minutes using AI or ready-made themes.
                         </p>
                     </div>
 
@@ -67,7 +68,7 @@ export default function LoginPage() {
                     </div>
 
                     <div className="text-center mt-10 opacity-80 text-sm italic">
-                    &quot;Buildoova helps you build your online presence — beautifully and effortlessly.&quot;
+                    &quot;buildoova helps you build your online presence — beautifully and effortlessly.&quot;
                     </div>
                 </div>
             </div>

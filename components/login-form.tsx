@@ -7,6 +7,7 @@ import Image from 'next/image';
 import linkedInIcon from '@/assets/svgs/linkedin.svg'
 import googleIcon from '@/assets/svgs/google.svg'
 import githubIcon from '@/assets/svgs/github.svg'
+import Link from "next/link";
 
 export function LoginForm({
   className,
@@ -27,7 +28,17 @@ export function LoginForm({
         <div className="grid gap-5">
             <Button
                 variant="outline"
-                className="w-full h-14 text-lg"
+                className="w-full h-14 text-lg cursor-pointer"
+                onClick={() => signIn("google")}
+                type="button"
+                >
+                    <Image src={googleIcon} width={25} height={25} alt='google icon'/>
+                Continue with Google
+            </Button>
+
+            <Button
+                variant="outline"
+                className="w-full h-14 text-lg cursor-pointer"
                 onClick={() => signIn("github")}
                 type="button"
                 >
@@ -38,17 +49,7 @@ export function LoginForm({
 
             <Button
                 variant="outline"
-                className="w-full h-14 text-lg"
-                onClick={() => signIn("google")}
-                type="button"
-                >
-                    <Image src={googleIcon} width={25} height={25} alt='google icon'/>
-                Continue with Google
-            </Button>
-
-            <Button
-                variant="outline"
-                className="w-full h-14 text-lg"
+                className="w-full h-14 text-lg cursor-pointer"
                 onClick={() => signIn("linkedin")}
                 type="button"
                 >
@@ -59,7 +60,9 @@ export function LoginForm({
         </div>
 
         <div className="text-center text-base text-muted-foreground">
-            By continuing, you agree to our Terms of Service and Privacy Policy
+            By continuing, you agree to our 
+            <Link href={'/termsOfService'}> Terms of Service </Link>
+            and <Link href={'privacyPolicy'}>Privacy Policy</Link>
         </div>
     </form>
   );
