@@ -2,9 +2,10 @@ import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import GitHubProvider from "next-auth/providers/github";
 import LinkedInProvider from "next-auth/providers/linkedin";
+import { createUserIfNotExists, getUserByEmail } from "@/controllers/user.controller";
 
+import type { User as NextAuthUser } from "next-auth";
 
-import { getUserByEmail, createUserIfNotExists } from "@/lib/db";
 
 const handler = NextAuth({
     providers: [
@@ -22,29 +23,34 @@ const handler = NextAuth({
         }),
     ],
     callbacks: {
-        async signIn({ user }) {
+        async signIn({ user }: { user: NextAuthUser }) {
+            if (!user.email) return false;
+        
             const dbUser = await getUserByEmail(user.email);
-
             if (!dbUser) {
-                await createUserIfNotExists(user);
+                await createUserIfNotExists({
+                    email: user.email,
+                    name: user.name,
+                    image: user.image,
+                });
             }
-
-            return true; 
+        
+            return true;
         },
 
         async jwt({ token, user }) {
-            if (user) {
+            if (user?.email) {
                 const dbUser = await getUserByEmail(user.email);
-                token.id = dbUser?.id;
-                token.role = dbUser?.role;
+                if(dbUser?._id){
+                    token.id = dbUser?._id?.toString();
+                }
             }
             return token;
         },
 
         async session({ session, token }) {
-            if (token && session.user) {
+            if (session.user && token) {
                 session.user.id = token.id;
-                session.user.role = token.role;
             }
             return session;
         },
@@ -52,8 +58,9 @@ const handler = NextAuth({
     theme: {
         colorScheme: "light",
         brandColor: "#2563eb",
-        logo: "@/assets/images/buildoova-logo.png",
+        logo: "/images/buildoova-logo",
     },
 });
+
 
 export { handler as GET, handler as POST };

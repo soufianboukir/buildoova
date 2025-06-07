@@ -1,4 +1,3 @@
-import buildoovaLogo from '@/assets/images/buildoova-logo.png'
 import { LoginForm } from "@/components/login-form"
 import Image from "next/image"
 import Link from 'next/link'
@@ -10,7 +9,7 @@ export default function LoginPage() {
             <div className="flex justify-center gap-2 md:justify-start">
                 <Link href="/" className="flex items-end gap-1 font-semibold">
                     <div className="bg-white text-primary-foreground flex size-10 items-center justify-center rounded-md">
-                        <Image src={buildoovaLogo} width={30} height={30} alt="Buildoova logo"/>
+                        <Image src={'/images/buildoova-logo.png'} width={30} height={30} alt="Buildoova logo"/>
                     </div>
                     buildoova
                 </Link>
@@ -28,7 +27,7 @@ export default function LoginPage() {
                 <div className="relative z-10 flex h-[100vh] flex-col justify-between p-10">
                     <div className="text-center">
                         <Image
-                            src={buildoovaLogo}
+                            src={'/images/buildoova-logo.png'}
                             width={60}
                             height={60}
                             alt="Buildoova logo"

@@ -14,12 +14,6 @@ export interface IUser extends Document {
     analyticsEnabled?: boolean;
     templatesUsed?: string[];
     customThemeSettings?: object;
-    inbox?: {
-        name: string;
-        email: string;
-        message: string;
-        date: Date;
-    }[];
 }
 
 const UserSchema: Schema = new Schema<IUser>(
@@ -35,19 +29,11 @@ const UserSchema: Schema = new Schema<IUser>(
         analyticsEnabled: { type: Boolean, default: true },
         templatesUsed: [{ type: String }],
         customThemeSettings: { type: Object },
-        inbox: [
-        {
-            name: { type: String },
-            email: { type: String },
-            message: { type: String },
-            date: { type: Date, default: Date.now },
-        },
-        ],
     },
     {
         timestamps: true,
     }
 );
   
-
-export default mongoose.models.User || mongoose.model<IUser>('User', UserSchema);
+const User = mongoose.models.user || mongoose.model<IUser>('User', UserSchema); 
+export default User;
