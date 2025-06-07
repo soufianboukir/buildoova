@@ -1,22 +1,27 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { auth } from './auth';
 
 const publicPaths = ['/', '/login'];
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;
 
     const isPublic = publicPaths.includes(pathname);
 
-    const token = request.cookies.get('next-auth.session-token') || request.cookies.get('__Secure-next-auth.session-token');
+    const session = await auth();
 
-    if (isPublic || token) {
+    if (isPublic) {
         return NextResponse.next();
     }
 
-    return NextResponse.redirect(new URL('/login', request.url));
+    if (!session) {
+        return NextResponse.redirect(new URL('/login', request.url));
+    }
+
+    return NextResponse.next();
 }
 
 export const config = {
-    matcher: ['/((?!_next|api|favicon.ico|images|static|.*\\..*).*)'],
+    matcher: ['/dashboard/:path*'],
 };

@@ -1,9 +1,13 @@
 import React from 'react'
 
-export const page = () => {
+const Home = () => {
     return (
         <div>
-            home page 
+            <h1 className='text-4xl font-semibold'>
+                home page
+            </h1>
         </div>
     )
 }
+
+export default Home;

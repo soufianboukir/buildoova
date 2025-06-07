@@ -1,7 +1,9 @@
+import { dbConnection } from "@/config/db";
 import User from "@/models/user.model";
 import { IUser } from "@/models/user.model";
 export const getUserByEmail = async (email: string): Promise<IUser | null> => {
     try {
+        await dbConnection();
         const user = await User.findOne({ email });
         return user;
     } catch (error) {
@@ -19,7 +21,7 @@ type AuthUser = {
   export const createUserIfNotExists = async (user: AuthUser) => {
         try {
             if (!user.email) return;
-        
+            await dbConnection();
             const existingUser = await User.findOne({ email: user.email });
     
             if (!existingUser) {
