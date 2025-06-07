@@ -12,7 +12,7 @@ export default function LoginPage() {
     const errorMessages: Record<string, string> = {
         OAuthAccountNotLinked: "An account with the same email exists. Please use the original login method.",
         AccessDenied: "Access was denied. Please try again.",
-        Configuration: "There was a configuration error. Please contact support.",
+        Configuration: "There was a network error. Please try again.",
         Verification: "Invalid or expired sign-in link.",
         Default: "Something went wrong during login. Please try again.",
     };
@@ -21,7 +21,7 @@ export default function LoginPage() {
 
     return (
         <div className="grid min-h-svh lg:grid-cols-2">
-            <div className="flex flex-col gap-4 p-6 md:p-10">
+            <div className="flex flex-col gap-4 p-6">
                 <div className="flex justify-center gap-2 md:justify-start">
                     <Link href="/" className="flex items-end gap-1 font-semibold">
                         <div className="bg-white text-primary-foreground flex size-10 items-center justify-center rounded-md">

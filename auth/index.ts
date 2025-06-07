@@ -67,3 +67,5 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         logo: "/images/buildoova-logo",
     },
 });
+
+export const { GET, POST } = handlers;
