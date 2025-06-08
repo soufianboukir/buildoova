@@ -14,36 +14,24 @@ import StepLabel from '@mui/material/StepLabel';
 import QontoConnector from '@/components/QontoConnector';
 import { QontoStepIcon } from '@/components/QontoStepIcon';
 import Image from 'next/image';
-import Switch from '@mui/material/Switch';
 import { Textarea } from '@/components/ui/textarea';
 import { DatePicker } from '@/components/ui/date-picker';
+import { toast } from 'sonner';
+import Switch from '@mui/material/Switch';
 
 type FormData = {
   goal: 'portfolio' | 'landing';
   
-  profilePhoto?: string | File;
+  profilePhoto: string;
   headline?: string;
   description?: string;
   identity: string;
   
-  colorTheme: string;
-  layoutStyle: 'modern' | 'classic';
-  darkMode: boolean;
+  colorTheme?: string;
+  layoutStyle?: string;
+  darkMode?: boolean;
   
-  socials: {
-    github?: string;
-    linkedin?: string;
-    twitter?: string;
-    email?: string;
-    website?: string;
-    dribbble?: string;
-    behance?: string;
-    phone?: string;
-  };
-  additionalLinks?: Array<{
-    url: string;
-    label?: string;
-  }>;
+  socials:string[];
   
   projects?: Array<{
     title: string;
@@ -93,7 +81,7 @@ const steps = [
 export default function StartPage() {
   const { control,register, handleSubmit, watch, setValue } = useForm<FormData>();
   const [step, setStep] = useState(0);
-  const router = useRouter();
+  // const router = useRouter();
 
   const onSubmit = (data: FormData) => {
     console.log('Collected Data:', data);
@@ -224,7 +212,7 @@ export default function StartPage() {
                     <div className="flex items-center space-x-4">
                       <div className="w-20 h-20 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden border border-gray-300">
                         {watch('profilePhoto') ? (
-                          <Image 
+                          <Image
                             width={100}
                             height={100}
                             src={watch('profilePhoto')} 
@@ -249,7 +237,7 @@ export default function StartPage() {
                                 const file = e.target.files[0];
                                 
                                 if (file.size > 2 * 1024 * 1024) {
-                                  alert('File size too large (max 2MB)');
+                                  toast.error('File size too large (max 2MB)')
                                   return;
                                 }
 
@@ -390,9 +378,8 @@ export default function StartPage() {
                   <div className="space-y-2">
                     <div className="flex items-center space-x-3">
                       <Switch
-                        id="darkMode"
                         checked={watch('darkMode')}
-                        onCheckedChange={(checked) => setValue('darkMode', checked)}
+                        onChange={(e, checked) => setValue('darkMode', checked)}
                       />
                       <Label htmlFor="darkMode">Enable Dark Mode by default</Label>
                     </div>
@@ -403,25 +390,36 @@ export default function StartPage() {
 
               {step === 4 && (
                 <div className="space-y-4">
-                  <Label className="text-gray-700">Add Your Links</Label>
+                  <Label className="text-gray-700">Add Your Social Links</Label>
                   
                   <div className="flex items-center gap-3">
                     <LinkIcon className="w-5 h-5 text-gray-400" />
                     <Input
-                      placeholder="https://example.com"
-                      {...register('links.0')}
+                      placeholder="https://example.com/profile"
+                      {...register('socials.0' as const)}
                       className="flex-1"
                     />
                   </div>
 
-                  {watch('links')?.slice(1).map((_, index) => (
-                    <div key={index+1} className="flex items-center gap-3 mt-3">
+                  {(watch('socials')?.slice(1) ?? []).map((_, index) => (
+                    <div key={index} className="flex items-center gap-3 mt-3">
                       <LinkIcon className="w-5 h-5 text-gray-400" />
                       <Input
-                        placeholder="https://another-link.com"
-                        {...register(`links.${index+1}`)}
+                        placeholder="https://another-social-site.com/username"
+                        {...register(`socials.${index + 1}` as const)}
                         className="flex-1"
                       />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const currentSocials = watch('socials') ?? [''];
+                          const updatedSocials = currentSocials.filter((_, i) => i !== index + 1);
+                          setValue('socials', updatedSocials.length ? updatedSocials : ['']);
+                        }}
+                        className="text-red-500 hover:text-red-700"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
                     </div>
                   ))}
 
@@ -430,12 +428,12 @@ export default function StartPage() {
                     variant="outline"
                     className="mt-3"
                     onClick={() => {
-                      const currentLinks = watch('links') || [''];
-                      setValue('links', [...currentLinks, '']);
+                      const currentSocials = watch('socials') ?? [''];
+                      setValue('socials', [...currentSocials, '']);
                     }}
                   >
                     <Plus className="w-4 h-4 mr-2" />
-                    Add another link
+                    Add another social link
                   </Button>
                 </div>
               )}
@@ -452,7 +450,7 @@ export default function StartPage() {
                           <button
                             type="button"
                             onClick={() => {
-                              const updatedProjects = watch('projects').filter((_, i) => i !== index);
+                              const updatedProjects = watch('projects')?.filter((_, i) => i !== index);
                               setValue('projects', updatedProjects);
                             }}
                             className="text-red-500 hover:text-red-700 text-sm"
@@ -496,8 +494,11 @@ export default function StartPage() {
                             accept="image/*"
                             onChange={(e) => {
                               if (e.target.files?.[0]) {
-                                const updatedProjects = [...watch('projects')];
-                                updatedProjects[index].image = e.target.files[0];
+                                const updatedProjects = [...(watch('projects') || [])];
+                                updatedProjects[index] = { 
+                                  ...updatedProjects[index], 
+                                  image: e.target.files[0] 
+                                };
                                 setValue('projects', updatedProjects);
                               }
                             }}
@@ -537,7 +538,7 @@ export default function StartPage() {
                           <button
                             type="button"
                             onClick={() => {
-                              const updatedExp = watch('experience').filter((_, i) => i !== index);
+                              const updatedExp = watch('experience')?.filter((_, i) => i !== index);
                               setValue('experience', updatedExp);
                             }}
                             className="text-red-500 hover:text-red-700 text-sm"
@@ -635,7 +636,7 @@ export default function StartPage() {
                           <button
                             type="button"
                             onClick={() => {
-                              const updatedServices = watch('services').filter((_, i) => i !== index);
+                              const updatedServices = watch('services')?.filter((_, i) => i !== index);
                               setValue('services', updatedServices);
                             }}
                             className="text-red-500 hover:text-red-700 text-sm"
@@ -690,7 +691,7 @@ export default function StartPage() {
                           <span>Resume uploaded</span>
                           <button
                             type="button"
-                            onClick={() => setValue('resume', null)}
+                            onClick={() => setValue('resume', undefined)}
                             className="text-red-500 hover:text-red-700 ml-2"
                           >
                             <Trash2 className="w-4 h-4" />
