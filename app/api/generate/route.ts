@@ -2,7 +2,14 @@ import { type FormData } from "@/app/start/page";
 import { auth } from "@/auth";
 import { promptToAi } from "@/constants";
 import { NextRequest, NextResponse } from "next/server";
-import Together from "together-ai";
+import { OpenAI } from "openai";
+
+const deepseekApiKey = process.env.DEEPSEEK_API_KEY
+
+const openai = new OpenAI({
+    baseURL: 'https://api.deepseek.com',
+    apiKey: deepseekApiKey
+});
 
 export const POST = async (request: NextRequest): Promise<NextResponse> =>{
     try{
@@ -15,25 +22,19 @@ export const POST = async (request: NextRequest): Promise<NextResponse> =>{
             })
         }
         const formData:FormData = await request.json()
-        const together = new Together();
+        const prompt: string = promptToAi(formData.goal, formData);
         
-        const response = await together.chat.completions.create({
-            messages: [
-                {
-                    role: "user",
-                    content: promptToAi(formData.goal, formData)
-                }
-            ],
-            model: "deepseek-ai/DeepSeek-V3"
-        });
-        const responseFromAi = response?.choices[0]?.message?.content;
+        const completion = await openai.chat.completions.create({
+            messages: [{ role: "system", content: prompt }],
+            model: "deepseek-chat",
+        });    
 
         return NextResponse.json({
-            'response' : responseFromAi
+            'response' : completion.choices[0].message.content
         });
 
-    }catch{
-        console.log('an error occured');
+    }catch(error){
+        console.log('an error occured ', error);
         return NextResponse.json({
                 message: 'error occured in server'
             },{

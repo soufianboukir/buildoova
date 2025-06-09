@@ -22,7 +22,6 @@ import { generateSite } from '@/services/ai';
 export type FormData = {
   goal: 'portfolio' | 'landing';
   
-  // Shared fields
   colorTheme?: string;
   layoutStyle?: string;
   socials?: string[];
@@ -38,7 +37,6 @@ export type FormData = {
     description: string;
   }>;
   
-  // Portfolio specific
   profilePhoto: string;
   headline?: string;
   description?: string;
@@ -56,7 +54,6 @@ export type FormData = {
   preferedLanguage?: string;
   techStack?: string;
   
-  // Landing page specific
   brandDescription?: string;
   brandPurpose?: string;
   heroImage: string;
@@ -138,11 +135,14 @@ export default function StartPage() {
 
   const onSubmit = async (data: FormData) => {
     console.log('Collected Data:', data);
-    const res = await generateSite(data)
-    console.log(res);
+    // const res = await generateSite(data)
+    // console.log(res);
   };
 
-  const nextStep = () => {
+  const nextStep = (e?: React.MouseEvent) => {
+    if (e) {
+      e.preventDefault();
+    }
     setStep((prev) => Math.min(prev + 1, steps.length - 1));
   };
 
@@ -178,7 +178,7 @@ export default function StartPage() {
           )}
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className='mt-10 text-center max-w-2xl mx-auto'>
+        <form className='mt-10 text-center max-w-2xl mx-auto'>
               <h2 className={`${step === 0 && 'hidden'} text-3xl font-semibold text-gray-800 mb-3`}>{currentStep.title}</h2>
               <Label className="block text-lg font-medium text-gray-700 mb-4">
                 {currentStep.description}
@@ -1223,19 +1223,26 @@ export default function StartPage() {
                   </div>
                 </div>
               )}
-
-          <div className="mt-6 w-[100%]">
-            {step < steps.length - 1 ? (
-                <Button type="button" onClick={nextStep} className='bg-blue-500 cursor-pointer hover:bg-blue-600 duration-100 rounded-full w-[40%]'>
-                    Continue
-                </Button>
-            ) : (
-                <Button type="submit" className='bg-blue-500 cursor-pointer hover:bg-blue-600 duration-100 w-[40%] rounded-full'>
-                    Generate Site
-                </Button>
-            )}
-          </div>
         </form>
+        <div className="mt-6 w-[100%] mx-auto flex justify-center">
+          {step < steps.length - 1 ? (
+            <Button 
+              type="button" 
+              onClick={nextStep}
+              className='bg-blue-500 cursor-pointer hover:bg-blue-600 duration-100 rounded-full w-[20%] mx-auto'
+            >
+              Continue
+            </Button>
+          ) : (
+            <Button 
+              type="button" 
+              onClick={handleSubmit(onSubmit)}
+              className='bg-blue-500 cursor-pointer hover:bg-blue-600 duration-100 w-[20%] rounded-full'
+            >
+              Generate Site
+            </Button>
+          )}
+        </div>
       </div>
     </div>
   );
