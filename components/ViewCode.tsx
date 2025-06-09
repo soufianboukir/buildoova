@@ -33,7 +33,7 @@ export function ViewCode({ code }: { code: string }) {
           <Code className="h-4 w-4" />
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-2xl">
+      <DialogContent className="w-[50%] mx-auto">
         <DialogHeader>
           <DialogTitle>Generated Code</DialogTitle>
           <DialogDescription>
