@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
-import { User, Briefcase, Rocket, ArrowLeft, Check, Layout, LayoutTemplate, Plus, LinkIcon, FileText, Trash2, Upload, Shapes, Shield } from 'lucide-react';
+import { User, Briefcase, Rocket, ArrowLeft, Check, Layout, LayoutTemplate, Plus, LinkIcon, FileText, Trash2, Upload, Shapes, Shield, CheckCircle } from 'lucide-react';
 import Stack from '@mui/material/Stack';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
@@ -17,15 +17,14 @@ import Image from 'next/image';
 import { Textarea } from '@/components/ui/textarea';
 import { DatePicker } from '@/components/ui/date-picker';
 import { toast } from 'sonner';
-import Switch from '@mui/material/Switch';
+import { generateSite } from '@/services/ai';
 
-type FormData = {
+export type FormData = {
   goal: 'portfolio' | 'landing';
   
   // Shared fields
   colorTheme?: string;
   layoutStyle?: string;
-  darkMode?: boolean;
   socials?: string[];
   projects?: Array<{
     title: string;
@@ -108,6 +107,7 @@ const portfolioSteps = [
   { title: 'Work Experience', description: 'Add professional history' },
   { title: 'Services', description: 'List services you offer' },
   { title: 'Final Touches', description: 'Additional details' },
+  { title: 'Publish', description: 'Review and launch' },
 ];
 
 const landingPageSteps = [
@@ -134,11 +134,12 @@ export default function StartPage() {
   const [step, setStep] = useState(0);
   const router = useRouter();
   const goal = watch('goal');
-
   const steps = goal === 'portfolio' ? portfolioSteps : landingPageSteps;
 
-  const onSubmit = (data: FormData) => {
+  const onSubmit = async (data: FormData) => {
     console.log('Collected Data:', data);
+    const res = await generateSite(data)
+    console.log(res);
   };
 
   const nextStep = () => {
@@ -422,7 +423,7 @@ export default function StartPage() {
                       placeholder="e.g., Innovative SaaS solutions for modern businesses"
                       className="border-gray-300 focus:border-blue-500"
                     />
-                    <p className="text-sm text-gray-500">Your company's mission or value proposition</p>
+                    <p className="text-sm text-gray-500">Your company&apos;s mission or value proposition</p>
                   </div>
 
                   <div className="space-y-2">
@@ -542,17 +543,6 @@ export default function StartPage() {
                         </button>
                       ))}
                     </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <div className="flex items-center space-x-3">
-                      <Switch
-                        checked={watch('darkMode')}
-                        onChange={(e, checked) => setValue('darkMode', checked)}
-                      />
-                      <Label htmlFor="darkMode">Enable Dark Mode by default</Label>
-                    </div>
-                    <p className="text-sm text-gray-500">Visitors can still switch modes</p>
                   </div>
                 </div>
               )}
@@ -799,7 +789,7 @@ export default function StartPage() {
               <div className="space-y-6">
                 <div className="space-y-3">
                   <Label>Trusted By Logos</Label>
-                  <p className="text-sm text-gray-500">Upload logos of companies/clients you've worked with</p>
+                  <p className="text-sm text-gray-500">Upload logos of companies/clients you&apos;ve worked with</p>
                   
                   <div className="border-2 border-dashed border-gray-300 rounded-lg p-6">
                     <div className="flex flex-wrap gap-4 mb-4">
@@ -1004,6 +994,21 @@ export default function StartPage() {
                       <span className="text-sm">We never share your contact info</span>
                     </div>
                   </div>
+                </div>
+              )}
+
+              {((step === 10 && goal === 'landing') || (step === 9 && goal === 'portfolio')) && (
+                <div className="max-w-md mx-auto text-center p-8 space-y-6">
+                  <CheckCircle className="mx-auto h-12 w-12 text-green-500" />
+                  
+                  <h2 className="text-2xl font-bold">
+                    {goal === 'portfolio' ? 'Portfolio Complete!' : 'Landing Page Ready!'}
+                  </h2>
+                  
+                  <p className="text-gray-600">
+                    Please review all your information carefully before publishing. 
+                    Check that everything appears as you want it to be seen publicly.
+                  </p>
                 </div>
               )}
               
@@ -1221,7 +1226,7 @@ export default function StartPage() {
 
           <div className="mt-6 w-[100%]">
             {step < steps.length - 1 ? (
-                <Button type="submit" onClick={nextStep} className='bg-blue-500 cursor-pointer hover:bg-blue-600 duration-100 rounded-full w-[40%]'>
+                <Button type="button" onClick={nextStep} className='bg-blue-500 cursor-pointer hover:bg-blue-600 duration-100 rounded-full w-[40%]'>
                     Continue
                 </Button>
             ) : (
