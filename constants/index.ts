@@ -2,26 +2,23 @@ import { type FormData } from "@/app/start/page";
 
 export const promptToAi = (goal: 'portfolio' | 'landing',formData: FormData) =>{    
     const prompt = `
-       You are an expert front-end developer and UI/UX designer. 
-        Based on the following structured JSON data, generate a fully responsive, modern website. Use Tailwind CSS for styling, React with TypeScript ('.tsx'), and clean component structure.
+        You are an expert front-end developer.
 
-        The website goal is: ${goal}  
-        Use modern design trends and semantic HTML. Optimize for performance and accessibility.
-        Generate the full React component code for a portfolio page. Do not wrap it in triple backticks. Output only the raw code, without markdown formatting.
+        Goal: Generate a html, tailwind.css (cdn) for a ${goal} based on the following data.
+
+        Instructions:
+        - Output only valid raw code (not JSON, not escaped).
+        - add things in your mind
+        - Do NOT wrap the code in triple backticks.
+        - Do NOT escape any characters (no \\, \", \\n).
+        - The response should be a complete, valid html code using TailwindCSS.
+        - Output only the raw code as a plain string.
 
         Data:
         ${JSON.stringify(formData, null, 2)}
 
-        Instructions:
-        - Use JSX/TSX (React with TypeScript)
-        - Use TailwindCSS for layout, fonts, spacing, responsiveness, and colors
-        - Include meaningful section names (e.g., Hero, About, Projects, Testimonials)
-        - Do not include any explanations, only return a single '.tsx' file with the full page layout
-        - Use placeholders for images and links if needed
-        - If arrays are empty or missing, omit those sections
-
-        Now generate the complete code:
-    `;
+        Now generate the code:
+        `;
     
     return prompt;
 }

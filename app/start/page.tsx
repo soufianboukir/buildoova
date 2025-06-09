@@ -5,7 +5,6 @@ import { useState } from 'react';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { useRouter } from 'next/navigation';
 import { User, Briefcase, Rocket, ArrowLeft, Check, Layout, LayoutTemplate, Plus, LinkIcon, FileText, Trash2, Upload, Shapes, Shield, CheckCircle } from 'lucide-react';
 import Stack from '@mui/material/Stack';
 import Stepper from '@mui/material/Stepper';
@@ -18,6 +17,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { DatePicker } from '@/components/ui/date-picker';
 import { toast } from 'sonner';
 import { generateSite } from '@/services/ai';
+import Loading from '@/components/Loading';
+import Preview from '@/components/Preview';
 
 export type FormData = {
   goal: 'portfolio' | 'landing';
@@ -129,14 +130,22 @@ export default function StartPage() {
     }
   });
   const [step, setStep] = useState(0);
-  const router = useRouter();
+  const [code,setCode] = useState('');
   const goal = watch('goal');
   const steps = goal === 'portfolio' ? portfolioSteps : landingPageSteps;
+  const [loading,setLoading] = useState(false);
 
   const onSubmit = async (data: FormData) => {
-    console.log('Collected Data:', data);
-    // const res = await generateSite(data)
-    // console.log(res);
+    try{
+      setLoading(true);
+      const res = await generateSite(data)
+      const cleanedRes = res.data.response.replace(/\\n/g, '').replace(/\\/g, '');
+      setCode(cleanedRes);
+    }catch{
+      toast.error("An error occured from server")
+    }finally{
+      setLoading(false)
+    }
   };
 
   const nextStep = (e?: React.MouseEvent) => {
@@ -148,6 +157,9 @@ export default function StartPage() {
 
   const prevStep = () => setStep((prev) => Math.max(prev - 1, 0));
   const currentStep = steps[step];
+
+  if(code) return <Preview code={code}/>
+  if(loading) return <Loading />
   return (
     <div className="min-h-screen bg-gray-50 py-4 px-4 sm:px-6 lg:px-8">
       <Button
