@@ -10,6 +10,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { Globe, Loader2, CheckCircle } from "lucide-react"
+import { toast } from "sonner"
+import { publishSite } from "@/services/site"
 
 export function PublishSite({ code }: { code: string }) {
   const [siteName, setSiteName] = useState("")
@@ -39,14 +41,20 @@ export function PublishSite({ code }: { code: string }) {
     validateSiteName(e.target.value)
   }
 
-  const handlePublish = () => {
+  const handlePublish = async () => {
     setIsPublishing(true)
 
-    setTimeout(() => {
+    try{
+      const response = await publishSite(code,siteName)
+      if(response.status === 200){
+        setIsPublished(true)
+        setTimeout(() => setIsPublished(false), 3000)
+      }
+    }catch{
+      toast.error('An error occuerd from server')
+    }finally{
       setIsPublishing(false)
-      setIsPublished(true)
-      setTimeout(() => setIsPublished(false), 3000)
-    }, 1500)
+    }
   }
 
   return (
