@@ -66,7 +66,6 @@ export function PublishSite({ code }: { code: string }) {
             aria-label="Publish site"
         >
             <Globe className="h-4 w-4" />
-            <span className="absolute inset-0 rounded-full bg-emerald-100 opacity-100 animate-ping duration-1000"></span>
         </Button>
         </DialogTrigger>
       <DialogContent className="sm:max-w-lg rounded-lg shadow-xl">

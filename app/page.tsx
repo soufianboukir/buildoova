@@ -26,7 +26,9 @@ export default async function Home() {
                         )
                     ) : (
                     <button className="px-6 py-1 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-lg transition cursor-pointer">
-                        Login
+                        <Link href={'/login'}>
+                            Login
+                        </Link>
                     </button>
                     )}
                 </div>

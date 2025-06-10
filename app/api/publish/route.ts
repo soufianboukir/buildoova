@@ -13,7 +13,7 @@ export const POST = async (request: NextRequest): Promise<NextResponse> =>{
                 status: 401
             })
         }
-        dbConnection()
+        await dbConnection()
         const { code, siteName } = await request.json()
         const siteNameExists = await User.findOne({siteName: siteName})
         if(siteNameExists){
@@ -38,7 +38,9 @@ export const POST = async (request: NextRequest): Promise<NextResponse> =>{
         return NextResponse.json({
             'message': 'Your site has been published'
         })
-    }catch{
+    }catch(error){
+        console.log(error);
+        
         return NextResponse.json({
             message: 'An error occured from server'
         },{

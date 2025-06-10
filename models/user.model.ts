@@ -18,7 +18,7 @@ const UserSchema: Schema = new Schema<IUser>(
         image: { type: String },
         username: { type: String, unique: true },
         siteName: { type: String },
-        code: { String}
+        code: { type: String}
     },
     {
         timestamps: true,

@@ -3,9 +3,7 @@ import GoogleProvider from "next-auth/providers/google";
 import GitHubProvider from "next-auth/providers/github";
 import LinkedInProvider from "next-auth/providers/linkedin";
 import { createUserIfNotExists, getUserByEmail } from "@/controllers/user.controller";
-
 import type { User as NextAuthUser } from "next-auth";
-
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
     providers: [
@@ -53,6 +51,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                 session.user.id = token.id;
             }
             return session;
+        },
+        redirect() {
+            return '/start';
         },
     },
     pages: {

@@ -11,10 +11,9 @@ import {
 import { Session } from "next-auth";
 import Image from "next/image";
 import { Input } from "./ui/input";
-import { signOut } from "@/auth";
 import { toast } from "sonner";
 import { updateUserProfile } from "@/services/user";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 
 export function Profile({ session }: { session: Session }) {
     const [formData, setFormData] = useState({
