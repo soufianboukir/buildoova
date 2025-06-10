@@ -62,10 +62,10 @@ export function PublishSite({ code }: { code: string }) {
       <DialogTrigger asChild>
         <Button 
             variant="outline" 
-            className="group relative w-9 h-9 rounded-full flex items-center justify-center border-2 border-emerald-300 hover:border-emerald-400 bg-emerald-50 hover:bg-emerald-100 transition-all duration-300 shadow-lg animate-bounce cursor-pointer"
+            className="h-9 w-9"
             aria-label="Publish site"
         >
-            <Globe className="w-12 h-12 text-emerald-600 group-hover:text-emerald-700 transition-colors z-10" />
+            <Globe className="h-4 w-4" />
             <span className="absolute inset-0 rounded-full bg-emerald-100 opacity-100 animate-ping duration-1000"></span>
         </Button>
         </DialogTrigger>

@@ -3,7 +3,7 @@ import { dbConnection } from "@/config/db";
 import User from "@/models/user.model";
 import { NextRequest, NextResponse } from "next/server";
 
-export const POST = async (request: NextRequest): Promise<NextResponse> =>{
+export const PUT = async (request: NextRequest): Promise<NextResponse> =>{
     try{
         const session = await auth()
         if(!session){
@@ -13,32 +13,39 @@ export const POST = async (request: NextRequest): Promise<NextResponse> =>{
                 status: 401
             })
         }
-        dbConnection()
-        const { code, siteName } = await request.json()
-        const siteNameExists = await User.findOne({siteName: siteName})
-        if(siteNameExists){
+
+        await dbConnection();
+        const {username,name} = await request.json();
+
+        const usernameExists = await User.findOne({$and:[{_id:{$ne:session.user.id}},{username}]})
+        if(usernameExists){
             return NextResponse.json({
-                'message': 'Site name is not available'
+                message: 'Username already exists'
             },{
                 status: 404
             })
         }
-        const user = await User.findById(session.user.id);
+
+        const user = await User.findById(session.user.id)
+
         if(!user){
             return NextResponse.json({
-                'message': 'User not found'
+                message: 'User not found'
             },{
                 status: 404
             })
         }
-        user.siteName = siteName;
-        user.code = code;
+
+        user.name = name;
+        user.username = username;
         await user.save();
 
         return NextResponse.json({
-            'message': 'Your site has been published'
+            message: 'Your profile updated successfully'
         })
-    }catch{
+    }catch(error){
+        console.log(error);
+        
         return NextResponse.json({
             message: 'An error occured from server'
         },{
