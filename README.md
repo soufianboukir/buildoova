@@ -18,7 +18,7 @@ A web-based platform built with **Next.js 15**, **NextAuth.js**, and **MongoDB**
 
 ## Getting Started
 
-### 1. Clone the Repository
+### 1. Clone the Repository & install dependencies
 
 ```bash
 git clone https://github.com/your-username/buildoova.git
