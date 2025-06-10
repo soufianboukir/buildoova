@@ -41,6 +41,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                 const dbUser = await getUserByEmail(user.email);
                 if(dbUser?._id){
                     token.id = dbUser?._id?.toString();
+                    token.username = dbUser.username;
                 }
             }
             return token;
@@ -49,6 +50,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         async session({ session, token }) {
             if (session.user && token) {
                 session.user.id = token.id;
+                session.user.username = token.username;
             }
             return session;
         },

@@ -1,6 +1,6 @@
 import React from "react";
 
-const Loading: React.FC = () => {
+const Loading = ({isAiGenerates}: {isAiGenerates: boolean}) => {
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gradient-to-br from-gray-50 to-blue-50">
         <div className="relative">
@@ -9,16 +9,23 @@ const Loading: React.FC = () => {
         </div>
 
         <p className="text-gray-700 text-lg font-medium mb-6 animate-pulse">
-            Generating your page, please wait...
+            {
+                isAiGenerates ?
+                "Generating your page, please wait..." : "Loading! please wait"
+            }
         </p>
 
-        <div className="max-w-md text-center px-4">
-            <p className="text-gray-500 text-sm italic">
-            <span className="inline-block animate-fadeInOut">
-                Did you know? Our AI is optimizing your layout for maximum engagement.
-            </span>
-            </p>
-        </div>
+        {
+            isAiGenerates && (
+                <div className="max-w-md text-center px-4">
+                    <p className="text-gray-500 text-sm italic">
+                    <span className="inline-block animate-fadeInOut">
+                        Did you know? Our AI is optimizing your layout for maximum engagement.
+                    </span>
+                    </p>
+                </div>
+            )
+        }
     </div>
   );
 };

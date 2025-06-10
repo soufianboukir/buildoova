@@ -20,7 +20,7 @@ export default function LoginPage() {
     const errorMessage = error ? errorMessages[error] || errorMessages["Default"] : null;
 
     return (
-        <div className="grid min-h-svh lg:grid-cols-2">
+        <div className="grid min-h-svh">
             <div className="flex flex-col gap-4 p-6">
                 <div className="flex justify-center gap-2 md:justify-start">
                     <Link href="/" className="flex items-end gap-1 font-semibold">
@@ -38,54 +38,6 @@ export default function LoginPage() {
                             </div>
                         )}
                         <LoginForm />
-                    </div>
-                </div>
-            </div>
-            <div className="bg-muted relative hidden lg:block">
-                <div className="relative hidden lg:block bg-gradient-to-br from-primary to-blue-800 text-white">
-                    <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
-                    <div className="relative z-10 flex h-[100vh] flex-col justify-between p-10">
-                        <div className="text-center">
-                            <Image
-                                src={'/images/buildoova-logo.png'}
-                                width={60}
-                                height={60}
-                                alt="Buildoova logo"
-                                className="mx-auto mb-4"
-                            />
-                            <h1 className="text-4xl font-bold">Design Smarter, Launch Faster</h1>
-                            <p className="mt-4 text-lg max-w-xl mx-auto">
-                                buildoova empowers creators, freelancers, and startups to generate stunning portfolios & landing pages in minutes using AI or ready-made themes.
-                            </p>
-                        </div>
-                        <div className="mt-8 flex flex-col items-center gap-6">
-                        {[
-                            {
-                            title: "AI-Powered Design",
-                            description: "Describe your idea — our AI builds a complete portfolio or landing page that fits your style.",
-                            },
-                            {
-                            title: "Pre-built Themes",
-                            description: "Choose from a library of professionally designed themes and customize them easily.",
-                            },
-                            {
-                            title: "One-Click Deployment",
-                            description: "Instantly publish your page to the web with a custom domain or use your own.",
-                            },
-                            {
-                            title: "Analytics & Insights",
-                            description: "Track traffic and performance with beautiful built-in analytics dashboards.",
-                            },
-                        ].map((feature, index) => (
-                            <div className="max-w-md text-center" key={index}>
-                            <h2 className="text-2xl font-semibold mb-2">{feature.title}</h2>
-                            <p className="text-sm opacity-90">{feature.description}</p>
-                            </div>
-                        ))}
-                        </div>
-                        <div className="text-center mt-10 opacity-80 text-sm italic">
-                        &quot;buildoova helps you build your online presence — beautifully and effortlessly.&quot;
-                        </div>
                     </div>
                 </div>
             </div>

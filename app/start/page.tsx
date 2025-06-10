@@ -159,7 +159,7 @@ export default function StartPage() {
   const currentStep = steps[step];
 
   if(code) return <Preview code={code}/>
-  if(loading) return <Loading />
+  if(loading) return <Loading isAiGenerates={true} />
   return (
     <div className="min-h-screen bg-gray-50 py-4 px-4 sm:px-6 lg:px-8">
       <Button
